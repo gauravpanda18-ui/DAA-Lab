@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void generateRandomArray(int arr[], int n)
+{
+    for(int i=0;i<n;i++)
+        arr[i]=rand()%1000;
+}
+
+void copyArray(int a[], int b[], int n)
+{
+    for(int i=0;i<n;i++)
+        b[i]=a[i];
+}
+
+// Version 1: Stops early if already sorted
+int bubbleSortOptimized(int arr[], int n)
+{
+    int comparisons=0;
+    int swapped;
+
+    for(int i=0;i<n-1;i++)
+    {
+        swapped=0;
+
+        for(int j=0;j<n-i-1;j++)
+        {
+            comparisons++;
+
+            if(arr[j]>arr[j+1])
+            {
+                int temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+                swapped=1;
+            }
+        }
+
+        if(swapped==0)
+            break;
+    }
+
+    return comparisons;
+}
+
+// Version 2: Always performs (n-1) passes
+int bubbleSortNormal(int arr[], int n)
+{
+    int comparisons=0;
+
+    for(int i=0;i<n-1;i++)
+    {
+        for(int j=0;j<n-i-1;j++)
+        {
+            comparisons++;
+
+            if(arr[j]>arr[j+1])
+            {
+                int temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+            }
+        }
+    }
+
+    return comparisons;
+}
+
+int main()
+{
+    srand(time(NULL));
+
+    int sizes[]={10,20,30,40,50,100,200};
+    int len=7;
+
+    printf("Size\tOptimized\tNormal\n");
+
+    for(int k=0;k<len;k++)
+    {
+        int n=sizes[k];
+
+        int arr1[n],arr2[n],original[n];
+
+        generateRandomArray(original,n);
+
+        copyArray(original,arr1,n);
+        copyArray(original,arr2,n);
+
+        int c1=bubbleSortOptimized(arr1,n);
+        int c2=bubbleSortNormal(arr2,n);
+
+        printf("%d\t%d\t\t%d\n",n,c1,c2);
+    }
+
+    return 0;
+}
